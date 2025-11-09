@@ -103,6 +103,20 @@ footer {
   100% { opacity: 1; transform: scale(1); }
 }
 
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding: 2em;
+}
+
+.gallery-image {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
 .social-icons img {
   width: 32px;
   margin: 0 0.5em;
