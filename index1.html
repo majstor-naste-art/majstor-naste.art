@@ -35,13 +35,20 @@
   </section>
 
   <section id="gallery">
-    <h2 data-i18n="gallery">Галерия</h2>
-    <div class="images">
-      <img src="images/1.jpg" alt="Пример 1" />
-      <img src="images/2.jpg" alt="Пример 2" />
-      <img src="images/3.jpg" alt="Пример 3" />
-      <img src="images/4.jpg" alt="Пример 4" />
-    </div>
+   <h1>Галерия</h1>
+  <div class="images">
+    <?php
+      $imageDir = 'images/';
+      $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+      foreach (scandir($imageDir) as $file) {
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (in_array($ext, $allowedExtensions)) {
+          echo "<img src='$imageDir$file' alt='$file' class='gallery-image' />";
+        }
+      }
+    ?>
+  </div>
   </section>
 
   <section id="contact">
