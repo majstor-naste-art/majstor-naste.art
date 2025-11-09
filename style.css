@@ -92,6 +92,17 @@ footer {
   padding: 2em;
 }
 
+.flash-header span {
+  display: inline-block;
+  animation: flash 1.5s infinite;
+}
+
+@keyframes flash {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 .social-icons img {
   width: 32px;
   margin: 0 0.5em;
