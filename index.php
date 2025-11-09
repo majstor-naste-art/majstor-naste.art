@@ -5,9 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MAJSTOR-NASTE</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>Галерия</h1>
+  <header>
+   <div class="logo flash-header">
+  <span>🔧 MAJSTOR-NASTE</span>
+</div>
+
+    <div class="language-switcher">
+      <button onclick="setLanguage('bg')">BG</button>
+      <button onclick="setLanguage('en')">EN</button>
+      <button onclick="setLanguage('al')">AL</button>
+    </div>
+  </header>
+
+  <section id="hero">
+    <h1 data-i18n="welcome">Добре дошли при майстора!</h1>
+    <p data-i18n="slogan">Качество, доверие и опит.</p>
+  </section>
+
+  <section id="services">
+    <h2 data-i18n="services">Услуги</h2>
+    <ul>
+      <li data-i18n="service1">Ремонт на покриви</li>
+      <li data-i18n="service2">Вътрешни ремонти</li>
+      <li data-i18n="service3">Изолация и фасади</li>
+    </ul>
+  </section>
+
+  <section id="gallery">
+   <h1>Галерия</h1>
   <div class="images">
     <?php
       $imageDir = 'images/';
@@ -21,5 +49,50 @@
       }
     ?>
   </div>
+  </section>
+
+  <section id="contact">
+    <h2 data-i18n="contact">Контакт</h2>
+    <form>
+      <input type="text" placeholder="Име" required />
+      <input type="email" placeholder="Имейл" required />
+      <input type="tel" placeholder="Телефон" />
+      <textarea placeholder="Съобщение"></textarea>
+      <button type="submit">Изпрати</button>
+    </form>
+    <div id="map">
+      <!-- Google Map embed -->
+      <iframe src="https://www.google.com/maps?q=Sredni+Kolibi,+Veliko+Tarnovo&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <footer>
+    <div class="social-icons">
+      <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
+      <a href="#"><img src="images/instagram.png" alt="Instagram" /></a>
+      <a href="#"><img src="images/youtube.png" alt="YouTube" /></a>
+      <a href="#"><img src="images/tiktok.png" alt="TikTok" /></a>
+    </div>
+    <p>&copy; 2025 MAJSTOR-NASTE</p>
+  </footer>
+
+  <!-- Messenger Chat Plugin -->
+  <div id="fb-root"></div>
+  <div id="fb-customer-chat" class="fb-customerchat"></div>
+  <script>
+    var chatbox = document.getElementById('fb-customer-chat');
+    chatbox.setAttribute("page_id", "61578925002497");
+    chatbox.setAttribute("attribution", "biz_inbox");
+    window.fbAsyncInit = function() {
+      FB.init({ xfbml: true, version: 'v18.0' });
+    };
+    (function(d, s, id) {
+      if (d.getElementById(id)) return;
+      var js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/bg_BG/sdk/xfbml.customerchat.js';
+      var fjs = d.getElementsByTagName(s)[0];
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
 </body>
 </html>
