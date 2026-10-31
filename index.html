@@ -3,62 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1a1a1a">
+  <meta name="theme-color" content="#0f172a">
   <title>Majstor-Naste</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome за икони -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- ГОРНА ЛЕНТА (Јазици и Социјални мрежи) -->
+  <div class="top-bar">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="mk">MK</button>
+      <button class="lang-btn" data-lang="bg">BG</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <div class="top-social">
+      <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
   <header>
     <h1>Majstor-Naste</h1>
-    <p>Куќи • Огради • Камини • Ламинат</p>
+    <p data-i18n="header_sub">Куќи • Огради • Камини • Ламинат</p>
   </header>
 
+  <!-- MARQUEE (Подвижна лента) -->
+  <div class="marquee-container">
+    <div class="marquee-content">
+      <span data-i18n="marquee_text">🔥 Висококвалитетни мајсторски услуги! • Поволен однос цена-квалитет! • Побарајте понуда уште денес! 🔥</span>
+      <span data-i18n="marquee_text">🔥 Висококвалитетни мајсторски услуги! • Поволен однос цена-квалитет! • Побарајте понуда уште денес! 🔥</span>
+    </div>
+  </div>
+
   <main>
+    <!-- ГАЛЕРИЈА -->
     <section id="gallery" class="page active">
       <div class="filters">
-        <button class="filter-btn active" data-filter="all">Сите</button>
-        <button class="filter-btn" data-filter="kukji">🏠 Куќи</button>
-        <button class="filter-btn" data-filter="ogradi">🚧 Огради</button>
-        <button class="filter-btn" data-filter="kamini">🔥 Камини</button>
-        <button class="filter-btn" data-filter="laminat">🪵 Ламинат</button>
+        <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Сите</button>
+        <button class="filter-btn" data-filter="kukji" data-i18n="cat_kukji">🏠 Куќи</button>
+        <button class="filter-btn" data-filter="ogradi" data-i18n="cat_ogradi">🚧 Огради</button>
+        <button class="filter-btn" data-filter="kamini" data-i18n="cat_kamini">🔥 Камини</button>
+        <button class="filter-btn" data-filter="laminat" data-i18n="cat_laminat">🪵 Ламинат</button>
       </div>
       <div class="grid" id="grid"></div>
     </section>
 
+    <!-- УСЛУГИ -->
     <section id="services" class="page">
-      <h2>Наши услуги</h2>
+      <h2 data-i18n="services_title">Наши услуги</h2>
       <ul class="services-list">
-        <li>🏠 Изградба и реновирање на куќи</li>
-        <li>🧱 Ѕидање, малтер, фасади</li>
-        <li>🚧 Поставување на огради (метал, дрво, бетон)</li>
-        <li>🔥 Изградба и обложување на камини</li>
-        <li>🪵 Поставување на ламинат и паркет</li>
-        <li>🛠️ Малтерски, гипсени и завршни работи</li>
+        <li data-i18n="srv_1">🏠 Изградба и реновирање на куќи</li>
+        <li data-i18n="srv_2">🧱 Ѕидање, малтер, фасади</li>
+        <li data-i18n="srv_3">🚧 Поставување на огради (метал, дрво, бетон)</li>
+        <li data-i18n="srv_4">🔥 Изградба и обложување на камини</li>
+        <li data-i18n="srv_5">🪵 Поставување на ламинат и паркет</li>
+        <li data-i18n="srv_6">🛠️ Малтерски, гипсени и завршни работи</li>
       </ul>
     </section>
 
+    <!-- КОНТАКТ -->
     <section id="contact" class="page">
-      <h2>Контакт</h2>
+      <h2 data-i18n="contact_title">Контакт</h2>
+      
       <div class="contact-card">
-        <a href="tel:+38970123456" class="btn">📞 Јави се</a>
-        <a href="viber://chat?number=%2B38970123456" class="btn">💬 Viber</a>
-        <a href="https://wa.me/38970123456" class="btn">🟢 WhatsApp</a>
-        <a href="mailto:kontakt@majstor-naste.mk" class="btn">✉️ Е-пошта</a>
+        <a href="tel:+38970123456" class="btn btn-call"><i class="fas fa-phone"></i> <span data-i18n="btn_call">Јави се</span></a>
+        <a href="viber://chat?number=%2B38970123456" class="btn btn-viber"><i class="fab fa-viber"></i> Viber</a>
+        <a href="https://wa.me/38970123456" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="mailto:kontakt@majstor-naste.mk" class="btn btn-mail"><i class="fas fa-envelope"></i> <span data-i18n="btn_mail">Е-пошта</span></a>
       </div>
+
       <div class="info">
-        <p>📍 Работна област: цела Македонија</p>
-        <p>🕐 Пон – Саб: 08:00 – 18:00</p>
+        <p>📍 <span data-i18n="info_area">Работна област: цела Македонија</span></p>
+        <p>🕐 <span data-i18n="info_hours">Пон – Саб: 08:00 – 18:00</span></p>
+      </div>
+
+      <h3 style="margin-top: 20px; color: var(--accent); text-align:center;" data-i18n="follow_us">Следи не:</h3>
+      <div class="social-links">
+        <a href="#" target="_blank" class="social-icon fb"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" target="_blank" class="social-icon ig"><i class="fab fa-instagram"></i></a>
+        <a href="#" target="_blank" class="social-icon tk"><i class="fab fa-tiktok"></i></a>
       </div>
     </section>
   </main>
 
+  <!-- ДОЛНА НАВИГАЦИЈА -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-page="gallery">📷<span>Галерија</span></button>
-    <button class="nav-btn" data-page="services">🛠️<span>Услуги</span></button>
-    <button class="nav-btn" data-page="contact">📞<span>Контакт</span></button>
+    <button class="nav-btn active" data-page="gallery"><i class="fas fa-images"></i><span data-i18n="nav_gallery">Галерија</span></button>
+    <button class="nav-btn" data-page="services"><i class="fas fa-tools"></i><span data-i18n="nav_services">Услуги</span></button>
+    <button class="nav-btn" data-page="contact"><i class="fas fa-phone-alt"></i><span data-i18n="nav_contact">Контакт</span></button>
   </nav>
 
+  <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox">
     <span class="close" id="close">&times;</span>
     <span class="nav-arrow prev" id="prev">&#10094;</span>
