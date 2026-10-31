@@ -1,8 +1,9 @@
 // ============================================================
 // ⚙️ ПОДЕСИ ГИ ОВИЕ ДВЕ ВРЕДНОСТИ
 // ============================================================
-const GITHUB_USER = "majstor-naste-art";   // ✅ ЦРТИЧКА – ова е корисничкото име
-const GITHUB_REPO = "majstor-naste.art";   // ✅ ТОЧКА – ова е repo-то
+const GITHUB_USER = "majstor-naste-art";
+const GITHUB_REPO = "majstor-naste.art";
+const BRANCH      = "main";
 // ============================================================
 
 const categories = {
