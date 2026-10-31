@@ -1,9 +1,9 @@
 // ============================================================
-// АВТОМАТСКО СКЕНИРАЊЕ – САМО СТАВАШ СЛИКИ И ГОТОВО!
+// ⚙️ ПОДЕСИ ГИ ОВИЕ ДВЕ ВРЕДНОСТИ
 // ============================================================
-// Правило: сликите во секоја папка мора да бидат нумерирани
-// 1.jpg, 2.jpg, 3.jpg... (без празнини). Може .jpg .jpeg .png .webp.
-// Апликацијата сама ги наоѓа. Не менувај ништо тука.
+const GITHUB_USER = "majstor-naste.art";  // на пр. "naste-majstor"
+const GITHUB_REPO = "majstor-naste.art";      // името на repo-то
+// ============================================================
 
 const categories = {
   kukji:   { label: "Куќи",    folder: "kukji"   },
@@ -12,55 +12,50 @@ const categories = {
   laminat: { label: "Ламинат", folder: "laminat" }
 };
 
-const extensions = ["jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "webp", "WEBP"];
-const MAX_PER_FOLDER = 500;
+const imageExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 
-function checkImage(src) {
-  return new Promise(resolve => {
-    const img = new Image();
-    img.onload  = () => resolve(true);
-    img.onerror = () => resolve(false);
-    img.src = src;
-  });
-}
-
-async function findImage(base, num) {
-  for (const ext of extensions) {
-    const src = `${base}/${num}.${ext}`;
-    if (await checkImage(src)) return src;
-  }
-  return null;
-}
-
-async function scanFolder(key) {
+// Земи ги сите слики од една папка преку GitHub API
+async function loadFolder(key) {
   const cfg = categories[key];
-  const base = `slike/${cfg.folder}`;
-  const found = [];
-  for (let i = 1; i <= MAX_PER_FOLDER; i++) {
-    const src = await findImage(base, i);
-    if (!src) break;
-    found.push({ src, category: key, title: `${cfg.label} ${i}` });
+  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/slike/${cfg.folder}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      console.warn(`⚠️ ${cfg.folder}: HTTP ${res.status}`);
+      return [];
+    }
+    const files = await res.json();
+    const imgs = files
+      .filter(f => f.type === "file" && imageExts.some(ext => f.name.toLowerCase().endsWith(ext)))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    console.log(`📁 ${cfg.folder}: ${imgs.length} слики`);
+    return imgs.map((f, i) => ({
+      src: f.download_url,
+      category: key,
+      title: `${cfg.label} ${i + 1}`
+    }));
+  } catch (e) {
+    console.error(`❌ ${cfg.folder}:`, e);
+    return [];
   }
-  console.log(`📁 ${base}: најдени ${found.length} слики`);
-  return found;
 }
 
 async function loadAllImages() {
   const all = [];
   for (const key of Object.keys(categories)) {
-    all.push(...await scanFolder(key));
+    all.push(...await loadFolder(key));
   }
   return all;
 }
 
 // ============================================================
-// ОД ТУКА НАДОЛУ – ЛОГИКА НА АПЛИКАЦИЈАТА
+// ЛОГИКА НА АПЛИКАЦИЈАТА (не менувај)
 // ============================================================
 
 let images = [];
 let currentList = [];
 let currentIndex = 0;
-
 const grid = document.getElementById("grid");
 
 function renderGrid(filter = "all") {
@@ -160,15 +155,15 @@ loadAllImages().then(found => {
       <div class="empty" style="text-align:left">
         <p><b>⚠️ Не се пронајдени слики.</b></p>
         <p style="margin-top:12px">Провери:</p>
-        <p>1️⃣ Имаш папки <code>slike/kukji</code>, <code>slike/ogradi</code>, <code>slike/kamini</code>, <code>slike/laminat</code>?</p>
-        <p>2️⃣ Сликите се викаат <code>1.jpg</code>, <code>2.jpg</code>, <code>3.jpg</code>...?</p>
-        <p>3️⃣ Нема празнина? (не смее 1, 2, 4 – без 3)</p>
-        <p>4️⃣ Папката <code>slike</code> е ДО <code>index.html</code>, не внатре?</p>
-        <p style="margin-top:12px">💡 Совет: избери сите слики → десен клик → Rename → внеси <code>1</code> → Windows автоматски ги нумерира.</p>
+        <p>1️⃣ <code>GITHUB_USER</code> и <code>GITHUB_REPO</code> во <code>script.js</code> се точни?</p>
+        <p>2️⃣ Repo-то е <b>Public</b> (не Private)?</p>
+        <p>3️⃣ Апликацијата е отворена преку <b>GitHub Pages</b> (не локално)?</p>
+        <p>4️⃣ Имаш слики во <code>slike/kamini/</code> итн?</p>
+        <p style="margin-top:12px">💡 Отвори Console (F12) за детали.</p>
       </div>
     `;
   } else {
     renderGrid();
-    console.log(`✅ Вкупно ${found.length} слики.`);
+    console.log(`✅ Вкупно ${found.length} слики вчитани.`);
   }
 });
