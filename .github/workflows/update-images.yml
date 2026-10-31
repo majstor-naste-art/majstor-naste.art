@@ -1,0 +1,45 @@
+name: Update image list
+on:
+  push:
+    branches: [ main ]
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image list JSON
+        shell: bash
+        run: |
+          echo "[" > slike.json
+          first=true
+          for cat in kukji ogradi kamini laminat; do
+            if [ -d "slike/$cat" ]; then
+              for file in slike/$cat/*.{jpg,jpeg,png,webp,gif}; do
+                if [ -f "$file" ]; then
+                  if [ "$first" = true ]; then
+                    first=false
+                  else
+                    echo "," >> slike.json
+                  fi
+                  filename=$(basename "$file")
+                  name="${filename%.*}"
+                  echo "  { \"src\": \"$file\", \"category\": \"$cat\", \"title\": \"$name\" }" >> slike.json
+                fi
+              done
+            fi
+          done
+          echo "]" >> slike.json
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add slike.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update image list"
+          git push
