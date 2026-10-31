@@ -4,7 +4,7 @@
 const GITHUB_USER = "majstor-naste-art";
 const GITHUB_REPO = "majstor-naste.art";
 const BRANCH      = "main";
-const GITHUB_TOKEN = ""; // <-- залепи го тука генерираниот токен
+
 // ============================================================
 
 const categories = {
