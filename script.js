@@ -1,5 +1,5 @@
 // ============================================================
-// ⚙️ ПОДЕСИ ГИ ОВИЕ ДВЕ ВРЕДНОСТИ
+// ⚙️ ГЛАВНИ ПОДЕСУВАЊА
 // ============================================================
 const GITHUB_USER = "majstor-naste-art";
 const GITHUB_REPO = "majstor-naste.art";
@@ -15,43 +15,60 @@ const categories = {
 
 const imageExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 
-// Земи ги сите слики од една папка преку GitHub API
-async function loadFolder(key) {
-  const cfg = categories[key];
-  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/slike/${cfg.folder}`;
+// Едно барање кон jsDelivr – БЕЗ ЛИМИТ, ги враќа сите папки
+async function loadAllImages() {
+  const url = `https://data.jsdelivr.com/v1/packages/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}`;
+  console.log("🔍 Барам:", url);
+
   try {
     const res = await fetch(url);
+    console.log("📡 Одговор:", res.status);
+
     if (!res.ok) {
-      console.warn(`⚠️ ${cfg.folder}: HTTP ${res.status}`);
+      console.error(`❌ jsDelivr HTTP ${res.status}`);
       return [];
     }
-    const files = await res.json();
-    const imgs = files
-      .filter(f => f.type === "file" && imageExts.some(ext => f.name.toLowerCase().endsWith(ext)))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const data = await res.json();
 
-    console.log(`📁 ${cfg.folder}: ${imgs.length} слики`);
-    return imgs.map((f, i) => ({
-      src: f.download_url,
-      category: key,
-      title: `${cfg.label} ${i + 1}`
-    }));
+    const slike = data.files.find(f => f.name === "slike" && f.type === "directory");
+    if (!slike) {
+      console.warn("⚠️ Нема папка 'slike' во repo-то");
+      return [];
+    }
+
+    const all = [];
+    for (const key of Object.keys(categories)) {
+      const cfg = categories[key];
+      const folder = slike.files.find(f => f.name === cfg.folder && f.type === "directory");
+
+      if (!folder) {
+        console.log(`📁 ${cfg.folder}: (нема папка)`);
+        continue;
+      }
+
+      const imgs = folder.files
+        .filter(f => f.type === "file" && imageExts.some(ext => f.name.toLowerCase().endsWith(ext)))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      console.log(`📁 ${cfg.folder}: ${imgs.length} слики`);
+
+      imgs.forEach((f, i) => {
+        all.push({
+          src: `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/slike/${cfg.folder}/${encodeURIComponent(f.name)}`,
+          category: key,
+          title: `${cfg.label} ${i + 1}`
+        });
+      });
+    }
+    return all;
   } catch (e) {
-    console.error(`❌ ${cfg.folder}:`, e);
+    console.error("❌", e);
     return [];
   }
 }
 
-async function loadAllImages() {
-  const all = [];
-  for (const key of Object.keys(categories)) {
-    all.push(...await loadFolder(key));
-  }
-  return all;
-}
-
 // ============================================================
-// ЛОГИКА НА АПЛИКАЦИЈАТА (не менувај)
+// ЛОГИКА (не менувај)
 // ============================================================
 
 let images = [];
@@ -150,21 +167,21 @@ grid.innerHTML = `<div class="empty">⏳ Се вчитуваат слики...</
 
 loadAllImages().then(found => {
   images = found;
-
   if (found.length === 0) {
     grid.innerHTML = `
       <div class="empty" style="text-align:left">
         <p><b>⚠️ Не се пронајдени слики.</b></p>
         <p style="margin-top:12px">Провери:</p>
-        <p>1️⃣ <code>GITHUB_USER</code> и <code>GITHUB_REPO</code> во <code>script.js</code> се точни?</p>
-        <p>2️⃣ Repo-то е <b>Public</b> (не Private)?</p>
-        <p>3️⃣ Апликацијата е отворена преку <b>GitHub Pages</b> (не локално)?</p>
-        <p>4️⃣ Имаш слики во <code>slike/kamini/</code> итн?</p>
+        <p>1️⃣ User: <code>${GITHUB_USER}</code></p>
+        <p>2️⃣ Repo: <code>${GITHUB_REPO}</code></p>
+        <p>3️⃣ Branch: <code>${BRANCH}</code></p>
+        <p>4️⃣ Repo-то е <b>Public</b>?</p>
+        <p>5️⃣ Имаш слики во <code>slike/kukji/</code>?</p>
         <p style="margin-top:12px">💡 Отвори Console (F12) за детали.</p>
       </div>
     `;
   } else {
     renderGrid();
-    console.log(`✅ Вкупно ${found.length} слики вчитани.`);
+    console.log(`✅ Вкупно ${found.length} слики.`);
   }
 });
