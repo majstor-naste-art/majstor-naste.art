@@ -1,9 +1,10 @@
 // ============================================================
-// ⚙️ ГЛАВНИ ПОДЕСУВАЊА
+// ⚙️ ПОДЕСУВАЊА
 // ============================================================
 const GITHUB_USER = "majstor-naste-art";
 const GITHUB_REPO = "majstor-naste.art";
 const BRANCH      = "main";
+const GITHUB_TOKEN = "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"; // <-- залепи го тука генерираниот токен
 // ============================================================
 
 const categories = {
@@ -15,54 +16,63 @@ const categories = {
 
 const imageExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 
-// Едно барање кон jsDelivr – БЕЗ ЛИМИТ, ги враќа сите папки
+// Ги вчитува сите слики од сите папки со ЕДНО барање до GitHub API
 async function loadAllImages() {
-  const url = `https://data.jsdelivr.com/v1/packages/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}`;
-  console.log("🔍 Барам:", url);
+  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/trees/${BRANCH}?recursive=1`;
 
   try {
-    const res = await fetch(url);
-    console.log("📡 Одговор:", res.status);
+    const res = await fetch(url, {
+      headers: {
+        "Authorization": `Bearer ${GITHUB_TOKEN}`,
+        "Accept": "application/vnd.github.v3+json"
+      }
+    });
 
     if (!res.ok) {
-      console.error(`❌ jsDelivr HTTP ${res.status}`);
+      console.error(`❌ GitHub API: HTTP ${res.status}`);
       return [];
     }
+
     const data = await res.json();
-
-    const slike = data.files.find(f => f.name === "slike" && f.type === "directory");
-    if (!slike) {
-      console.warn("⚠️ Нема папка 'slike' во repo-то");
+    if (!data.tree) {
+      console.warn("⚠️ Не можам да го прочитам дрвото на фајлови.");
       return [];
     }
 
-    const all = [];
-    for (const key of Object.keys(categories)) {
-      const cfg = categories[key];
-      const folder = slike.files.find(f => f.name === cfg.folder && f.type === "directory");
+    const allImages = [];
 
-      if (!folder) {
-        console.log(`📁 ${cfg.folder}: (нема папка)`);
-        continue;
-      }
+    data.tree.forEach(item => {
+      // item.path изгледа вака: "slike/kukji/IMG_20220602_073923.jpg"
+      if (item.type !== "blob") return;
 
-      const imgs = folder.files
-        .filter(f => f.type === "file" && imageExts.some(ext => f.name.toLowerCase().endsWith(ext)))
-        .sort((a, b) => a.name.localeCompare(b.name));
+      const parts = item.path.split("/");
+      if (parts.length !== 3 || parts[0] !== "slike") return;
 
-      console.log(`📁 ${cfg.folder}: ${imgs.length} слики`);
+      const folderKey = parts[1];
+      const fileName = parts[2];
 
-      imgs.forEach((f, i) => {
-        all.push({
-          src: `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/slike/${cfg.folder}/${encodeURIComponent(f.name)}`,
-          category: key,
-          title: `${cfg.label} ${i + 1}`
-        });
+      if (!categories[folderKey]) return;
+      if (!imageExts.some(ext => fileName.toLowerCase().endsWith(ext))) return;
+
+      const cfg = categories[folderKey];
+      // Конструирај директна RAW URL адреса до сликата
+      const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/slike/${folderKey}/${encodeURIComponent(fileName)}`;
+
+      allImages.push({
+        src: rawUrl,
+        category: folderKey,
+        title: `${cfg.label} - ${fileName.replace(/\.[^.]+$/, '')}` // Прикажи го името без екстензија
       });
-    }
-    return all;
+    });
+
+    // Подреди ги по име за секоја категорија
+    allImages.sort((a, b) => a.title.localeCompare(b.title));
+
+    console.log(`✅ Вкупно ${allImages.length} слики.`);
+    return allImages;
+
   } catch (e) {
-    console.error("❌", e);
+    console.error("❌ Грешка при вчитување:", e);
     return [];
   }
 }
@@ -172,16 +182,13 @@ loadAllImages().then(found => {
       <div class="empty" style="text-align:left">
         <p><b>⚠️ Не се пронајдени слики.</b></p>
         <p style="margin-top:12px">Провери:</p>
-        <p>1️⃣ User: <code>${GITHUB_USER}</code></p>
-        <p>2️⃣ Repo: <code>${GITHUB_REPO}</code></p>
-        <p>3️⃣ Branch: <code>${BRANCH}</code></p>
-        <p>4️⃣ Repo-то е <b>Public</b>?</p>
-        <p>5️⃣ Имаш слики во <code>slike/kukji/</code>?</p>
-        <p style="margin-top:12px">💡 Отвори Console (F12) за детали.</p>
+        <p>1️⃣ Дали токенот е точно копиран?</p>
+        <p>2️⃣ Дали repo-то е Public?</p>
+        <p>3️⃣ Дали папката <code>slike/kukji</code> има барем 1 слика?</p>
+        <p style="margin-top:12px">💡 Console (F12) покажува детали.</p>
       </div>
     `;
   } else {
     renderGrid();
-    console.log(`✅ Вкупно ${found.length} слики.`);
   }
 });
