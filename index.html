@@ -1,98 +1,72 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="mk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MAJSTOR-NASTE</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>Majstor-Naste</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-   <div class="logo flash-header">
-  <span>🔧 MAJSTOR-NASTE</span>
-</div>
 
-    <div class="language-switcher">
-      <button onclick="setLanguage('bg')">BG</button>
-      <button onclick="setLanguage('en')">EN</button>
-      <button onclick="setLanguage('al')">AL</button>
-    </div>
+  <header>
+    <h1>Majstor-Naste</h1>
+    <p>Професионални мајсторски услуги</p>
   </header>
 
-  <section id="hero">
-    <h1 data-i18n="welcome">Добре дошли при майстора!</h1>
-    <p data-i18n="slogan">Качество, доверие и опит.</p>
-  </section>
+  <main>
+    <!-- ГАЛЕРИЈА -->
+    <section id="gallery" class="page active">
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">Сите</button>
+        <button class="filter-btn" data-filter="bath">Бањи</button>
+        <button class="filter-btn" data-filter="kitchen">Кујни</button>
+        <button class="filter-btn" data-filter="other">Друго</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
 
-  <section id="services">
-    <h2 data-i18n="services">Услуги</h2>
-    <ul>
-      <li data-i18n="service1">Ремонт на покриви</li>
-      <li data-i18n="service2">Вътрешни ремонти</li>
-      <li data-i18n="service3">Изолация и фасади</li>
-    </ul>
-  </section>
+    <!-- УСЛУГИ -->
+    <section id="services" class="page">
+      <h2>Наши услуги</h2>
+      <ul class="services-list">
+        <li>🔧 Реновирање на бањи</li>
+        <li>🍳 Монтажа и реновирање на кујни</li>
+        <li>🧱 Плочки и керамика</li>
+        <li>🚿 Водоинсталации</li>
+        <li>💡 Електрични инсталации</li>
+        <li>🪚 Малтерски и гипсени работи</li>
+      </ul>
+    </section>
 
-  <section id="gallery">
-   <h1>Галерия</h1>
-  <div class="images">
-    <?php
-      $imageDir = 'images/';
-      $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    <!-- КОНТАКТ -->
+    <section id="contact" class="page">
+      <h2>Контакт</h2>
+      <div class="contact-card">
+        <a href="tel:+38970123456" class="btn">📞 Јави се</a>
+        <a href="viber://chat?number=%2B38970123456" class="btn">💬 Viber</a>
+        <a href="https://wa.me/38970123456" class="btn">🟢 WhatsApp</a>
+        <a href="mailto:kontakt@majstor-naste.mk" class="btn">✉️ Е-пошта</a>
+      </div>
+    </section>
+  </main>
 
-      foreach (scandir($imageDir) as $file) {
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        if (in_array($ext, $allowedExtensions)) {
-          echo "<img src='$imageDir$file' alt='$file' class='gallery-image' />";
-        }
-      }
-    ?>
+  <!-- ДОЛНА НАВИГАЦИЈА -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="gallery">📷<span>Галерија</span></button>
+    <button class="nav-btn" data-page="services">🛠️<span>Услуги</span></button>
+    <button class="nav-btn" data-page="contact">📞<span>Контакт</span></button>
+  </nav>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" id="close">&times;</span>
+    <span class="nav-arrow prev" id="prev">&#10094;</span>
+    <img id="lightbox-img" src="" alt="">
+    <span class="nav-arrow next" id="next">&#10095;</span>
+    <div class="counter" id="counter"></div>
   </div>
-  </section>
 
-  <section id="contact">
-    <h2 data-i18n="contact">Контакт</h2>
-    <form>
-      <input type="text" placeholder="Име" required />
-      <input type="email" placeholder="Имейл" required />
-      <input type="tel" placeholder="Телефон" />
-      <textarea placeholder="Съобщение"></textarea>
-      <button type="submit">Изпрати</button>
-    </form>
-    <div id="map">
-      <!-- Google Map embed -->
-      <iframe src="https://www.google.com/maps?q=Sredni+Kolibi,+Veliko+Tarnovo&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
-    </div>
-  </section>
-
-  <footer>
-    <div class="social-icons">
-      <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
-      <a href="#"><img src="images/instagram.png" alt="Instagram" /></a>
-      <a href="#"><img src="images/youtube.png" alt="YouTube" /></a>
-      <a href="#"><img src="images/tiktok.png" alt="TikTok" /></a>
-    </div>
-    <p>&copy; 2025 MAJSTOR-NASTE</p>
-  </footer>
-
-  <!-- Messenger Chat Plugin -->
-  <div id="fb-root"></div>
-  <div id="fb-customer-chat" class="fb-customerchat"></div>
-  <script>
-    var chatbox = document.getElementById('fb-customer-chat');
-    chatbox.setAttribute("page_id", "61578925002497");
-    chatbox.setAttribute("attribution", "biz_inbox");
-    window.fbAsyncInit = function() {
-      FB.init({ xfbml: true, version: 'v18.0' });
-    };
-    (function(d, s, id) {
-      if (d.getElementById(id)) return;
-      var js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/bg_BG/sdk/xfbml.customerchat.js';
-      var fjs = d.getElementsByTagName(s)[0];
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
