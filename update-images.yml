@@ -1,0 +1,40 @@
+name: Update image list
+on:
+  push:
+    branches: [ main ]
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate image list JSON
+        run: |
+          echo "[]" > slike.json
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const categories = ["kukji", "ogradi", "kamini", "laminat"];
+            const all = [];
+            categories.forEach(cat => {
+              const dir = path.join("slike", cat);
+              if (fs.existsSync(dir)) {
+                fs.readdirSync(dir).forEach(file => {
+                  if (/\.(jpg|jpeg|png|webp|gif)$/i.test(file)) {
+                    all.push({
+                      src: `slike/${cat}/${file}`,
+                      category: cat,
+                      title: file.replace(/\.[^.]+$/, "")
+                    });
+                  }
+                });
+              }
+            });
+            fs.writeFileSync("slike.json", JSON.stringify(all, null, 2));
+          '
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add slike.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update image list"
+          git push
