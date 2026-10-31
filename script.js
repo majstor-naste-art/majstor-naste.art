@@ -9,31 +9,31 @@ const BRANCH      = "main";
 // 🌐 РЕЧНИК ЗА ПРЕВОД
 const translations = {
   mk: {
-    header_sub: "Куќи • Огради • Камини • Ламинат",
+    header_sub: "Куќи • Огради • Камини • Калдрма и плочки",
     marquee_text: "🔥 Висококвалитетни мајсторски услуги! • Поволен однос цена-квалитет! • Побарајте понуда уште денес! 🔥",
-    filter_all: "Сите", cat_kukji: "🏠 Куќи", cat_ogradi: "🚧 Огради", cat_kamini: "🔥 Камини", cat_laminat: "🪵 Ламинат",
+    filter_all: "Сите", cat_kukji: "🏠 Куќи", cat_ogradi: "🚧 Огради", cat_kamini: "🔥 Камини", cat_laminat: "🪨 Калдрма и плочки",
     services_title: "Наши услуги",
-    srv_1: "🏠 Изградба и реновирање на куќи", srv_2: "🧱 Ѕидање, малтер, фасади", srv_3: "🚧 Поставување на огради (метал, дрво, бетон)", srv_4: "🔥 Изградба и обложување на камини", srv_5: "🪵 Поставување на ламинат и паркет", srv_6: "🛠️ Малтерски, гипсени и завршни работи",
+    srv_1: "🏠 Изградба и реновирање на куќи", srv_2: "🧱 Ѕидање, малтер, фасади", srv_3: "🚧 Поставување на огради (метал, дрво, бетон)", srv_4: "🔥 Изградба и обложување на камини", srv_5: "🪨 Поставување на калдрма и плочки", srv_6: "🛠️ Малтерски, гипсени и завршни работи",
     contact_title: "Контакт", btn_call: "Јави се", btn_mail: "Е-пошта",
     info_area: "Работна област: цела Македонија", info_hours: "Пон – Саб: 08:00 – 18:00", follow_us: "Следи не:",
     nav_gallery: "Галерија", nav_services: "Услуги", nav_contact: "Контакт"
   },
   bg: {
-    header_sub: "Къщи • Огради • Камини • Ламинат",
+    header_sub: "Къщи • Огради • Камини • Калдъръм и плочки",
     marquee_text: "🔥 Висококачествени майсторски услуги! • Добро съотношение цена-качество! • Поискайте оферта още днес! 🔥",
-    filter_all: "Всички", cat_kukji: "🏠 Къщи", cat_ogradi: "🚧 Огради", cat_kamini: "🔥 Камини", cat_laminat: "🪵 Ламинат",
+    filter_all: "Всички", cat_kukji: "🏠 Къщи", cat_ogradi: "🚧 Огради", cat_kamini: "🔥 Камини", cat_laminat: "🪨 Калдъръм и плочки",
     services_title: "Нашите услуги",
-    srv_1: "🏠 Строителство и ремонт на къщи", srv_2: "🧱 Зидарство, мазилка, фасади", srv_3: "🚧 Монтаж на огради (метал, дърво, бетон)", srv_4: "🔥 Изграждане и облицовка на камини", srv_5: "🪵 Монтаж на ламинат и паркет", srv_6: "🛠️ Мазилки, гипсокартон и довършителни работи",
+    srv_1: "🏠 Строителство и ремонт на къщи", srv_2: "🧱 Зидарство, мазилка, фасади", srv_3: "🚧 Монтаж на огради (метал, дърво, бетон)", srv_4: "🔥 Изграждане и облицовка на камини", srv_5: "🪨 Монтаж на калдъръм и плочки", srv_6: "🛠️ Мазилки, гипсокартон и довършителни работи",
     contact_title: "Контакти", btn_call: "Обади се", btn_mail: "Имейл",
     info_area: "Район на работа: цяла Македония", info_hours: "Пон – Съб: 08:00 – 18:00", follow_us: "Последвай ни:",
     nav_gallery: "Галерия", nav_services: "Услуги", nav_contact: "Контакти"
   },
   en: {
-    header_sub: "Houses • Fences • Fireplaces • Laminate",
+    header_sub: "Houses • Fences • Fireplaces • Cobblestones & Tiles",
     marquee_text: "🔥 High-quality craftsmanship! • Great price-quality ratio! • Request a quote today! 🔥",
-    filter_all: "All", cat_kukji: "🏠 Houses", cat_ogradi: "🚧 Fences", cat_kamini: "🔥 Fireplaces", cat_laminat: "🪵 Laminate",
+    filter_all: "All", cat_kukji: "🏠 Houses", cat_ogradi: "🚧 Fences", cat_kamini: "🔥 Fireplaces", cat_laminat: "🪨 Cobblestones & Tiles",
     services_title: "Our Services",
-    srv_1: "🏠 House construction and renovation", srv_2: "🧱 Masonry, plaster, facades", srv_3: "🚧 Fence installation (metal, wood, concrete)", srv_4: "🔥 Fireplace construction and cladding", srv_5: "🪵 Laminate and parquet installation", srv_6: "🛠️ Plastering, drywall and finishing works",
+    srv_1: "🏠 House construction and renovation", srv_2: "🧱 Masonry, plaster, facades", srv_3: "🚧 Fence installation (metal, wood, concrete)", srv_4: "🔥 Fireplace construction and cladding", srv_5: "🪨 Cobblestone and tile installation", srv_6: "🛠️ Plastering, drywall and finishing works",
     contact_title: "Contact", btn_call: "Call Us", btn_mail: "Email",
     info_area: "Working area: all of Macedonia", info_hours: "Mon – Sat: 08:00 – 18:00", follow_us: "Follow us:",
     nav_gallery: "Gallery", nav_services: "Services", nav_contact: "Contact"
