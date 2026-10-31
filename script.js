@@ -4,7 +4,6 @@
 const GITHUB_USER = "majstor-naste-art";
 const GITHUB_REPO = "majstor-naste.art";
 const BRANCH      = "main";
-
 // ============================================================
 
 const categories = {
@@ -14,65 +13,19 @@ const categories = {
   laminat: { label: "Ламинат", folder: "laminat" }
 };
 
-const imageExts = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
-
-// Ги вчитува сите слики од сите папки со ЕДНО барање до GitHub API
+// Вчитување на листата од JSON фајлот
 async function loadAllImages() {
-  const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/trees/${BRANCH}?recursive=1`;
-
   try {
-    const res = await fetch(url, {
-      headers: {
-        "Authorization": `Bearer ${GITHUB_TOKEN}`,
-        "Accept": "application/vnd.github.v3+json"
-      }
-    });
-
+    const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/slike.json`);
     if (!res.ok) {
-      console.error(`❌ GitHub API: HTTP ${res.status}`);
+      console.error(`❌ Не можам да го вчитам slike.json: HTTP ${res.status}`);
       return [];
     }
-
     const data = await res.json();
-    if (!data.tree) {
-      console.warn("⚠️ Не можам да го прочитам дрвото на фајлови.");
-      return [];
-    }
-
-    const allImages = [];
-
-    data.tree.forEach(item => {
-      // item.path изгледа вака: "slike/kukji/IMG_20220602_073923.jpg"
-      if (item.type !== "blob") return;
-
-      const parts = item.path.split("/");
-      if (parts.length !== 3 || parts[0] !== "slike") return;
-
-      const folderKey = parts[1];
-      const fileName = parts[2];
-
-      if (!categories[folderKey]) return;
-      if (!imageExts.some(ext => fileName.toLowerCase().endsWith(ext))) return;
-
-      const cfg = categories[folderKey];
-      // Конструирај директна RAW URL адреса до сликата
-      const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/slike/${folderKey}/${encodeURIComponent(fileName)}`;
-
-      allImages.push({
-        src: rawUrl,
-        category: folderKey,
-        title: `${cfg.label} - ${fileName.replace(/\.[^.]+$/, '')}` // Прикажи го името без екстензија
-      });
-    });
-
-    // Подреди ги по име за секоја категорија
-    allImages.sort((a, b) => a.title.localeCompare(b.title));
-
-    console.log(`✅ Вкупно ${allImages.length} слики.`);
-    return allImages;
-
+    console.log(`✅ Вкупно ${data.length} слики.`);
+    return data;
   } catch (e) {
-    console.error("❌ Грешка при вчитување:", e);
+    console.error("❌ Грешка:", e);
     return [];
   }
 }
@@ -182,10 +135,9 @@ loadAllImages().then(found => {
       <div class="empty" style="text-align:left">
         <p><b>⚠️ Не се пронајдени слики.</b></p>
         <p style="margin-top:12px">Провери:</p>
-        <p>1️⃣ Дали токенот е точно копиран?</p>
-        <p>2️⃣ Дали repo-то е Public?</p>
+        <p>1️⃣ Дали GitHub Actions заврши успешно?</p>
+        <p>2️⃣ Дали <code>slike.json</code> е креиран?</p>
         <p>3️⃣ Дали папката <code>slike/kukji</code> има барем 1 слика?</p>
-        <p style="margin-top:12px">💡 Console (F12) покажува детали.</p>
       </div>
     `;
   } else {
